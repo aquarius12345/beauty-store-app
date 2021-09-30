@@ -4,21 +4,26 @@ const express = require('express');
 const connectDB = require('./config/db.config');
 const cors = require('cors');
 const adminAuth = require('./routes/adminAuth.routes');
+const authMiddleware = require('./middlewares/auth.middleware');
+const adminRoutes = require('./routes/adminAuth.routes');
+
 
 //Conexao
 connectDB();
 
 const app = express();
 
+app.use(cors());
+
 app.use(express.json());
 
-app.use(cors());
 
 //Rotas publicas
 app.use('/', adminAuth);
 //Middleware
-
+app.use(authMiddleware);
 //Rotas Privadas
+app.use('/', adminRoutes);
 
 
 
