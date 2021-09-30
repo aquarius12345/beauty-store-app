@@ -5,7 +5,7 @@ const connectDB = require('./config/db.config');
 const cors = require('cors');
 const adminAuth = require('./routes/adminAuth.routes');
 const authMiddleware = require('./middlewares/auth.middleware');
-const adminRoutes = require('./routes/adminAuth.routes');
+const adminRoutes = require('./routes/admin.routes');
 
 
 //Conexao
