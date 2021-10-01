@@ -9,31 +9,32 @@ const router = Router();
 router.post('/product', async (req, res) => {
     const payload = req.body;
     const { id } = req.user;
+
     try {
         const adminId = await Admin.findById(id);
         if(!adminId) {
-            throw new Error('user not found');
+            throw new Error('user Unauthorized');
         }
 
         const newProduct = await Product.create(payload);
         res.status(201).json(newProduct);
-        console.log('one product', newProduct);
 
     } catch(error) {
-        res.status(500).json({ msg: 'Error while creating product', error });
+        res.status(500).json({ msg: 'Error while creating product', error: error.message || error });
     }
 });
 
 
-//criar varios produtos de uma vez(array de produtos)
+//criar varios produtos de uma vez(payload = array de produtos)
 router.post('/poduct/many', async (req, res) => {
     const payload = req.body;
+
     try {
-        const newProducts =  await Product.create([payload]);
+        const newProducts =  await Product.create(payload);
         console.log('new products array', newProducts);
         res.status(201).json(newProducts);
     } catch(error) {
-        res.status(500).json({ msg: 'Error while creating products'});
+        res.status(500).json({ msg: 'Error while creating products'}, error);
     }
 });
 
@@ -41,16 +42,43 @@ router.post('/poduct/many', async (req, res) => {
 //adicionar imagem do cloudinary
 router.put('/product/upload-image/:productId', uploadImage.single('image'), async(req, res) => {
     const { path } = req.file
-    console.log('req.file', req.file);
+    //console.log('req.file', req.file);
     const { productId } = req.params;
 
     try {
         const updatePic = await Product.findByIdAndUpdate(productId, { image_one: path }, { new: true});
         res.status(200).json(updatePic);
     } catch(error) {
-        res.status(500).json(error);
+        res.status(500).json({ msg: 'Error while uploading image' }, error);
     }
 });
+
+
+//editar um produto
+router.put('/product/:productId', async(req, res) => {
+    const { productId } = req.params;
+    const { payload } = req.body;
+
+    try {
+        const editedProduct = await Product.findByIdAndUpdate(productId, payload);
+        res.status(200).json(editedProduct);
+    } catch (error) {
+        res.status(500).json({ mesg: 'Error while editing product'}, error);
+    }
+});
+
+
+//deletar um produto
+router.delete('/product/:productId', async (req, res) => {
+    const { productId } = req.params;
+
+    try {
+        await Product.findByIdAndDelete(productId);
+        res.status(200).json();
+    } catch (error) {
+        res.status(500).json({ msg: 'Error while deleting product' }, error);
+    }
+})
 
 
 module.exports = router;

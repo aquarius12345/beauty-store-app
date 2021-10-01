@@ -6,6 +6,7 @@ const cors = require('cors');
 const adminAuth = require('./routes/adminAuth.routes');
 const authMiddleware = require('./middlewares/auth.middleware');
 const adminRoutes = require('./routes/admin.routes');
+const productsRoutes = require('./routes/products.routes');
 
 
 //Conexao
@@ -18,11 +19,14 @@ app.use(cors());
 app.use(express.json());
 
 
-//Rotas publicas
+////Rotas publicas
 app.use('/', adminAuth);
-//Middleware
+app.use('/', productsRoutes);
+
+///Middleware
 app.use(authMiddleware);
-//Rotas Privadas
+
+////Rotas Privadas
 app.use('/', adminRoutes);
 
 
