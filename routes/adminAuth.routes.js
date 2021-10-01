@@ -11,6 +11,7 @@ router.post('/admin-auth/signup', async (req, res) => {
         if (!name || !password) {
             throw new Error('Missing username or password');
         }
+        
         const admin = await Admin.findOne({ name });
         if (admin) {
             throw new Error('username already exists');

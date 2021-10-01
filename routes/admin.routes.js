@@ -11,6 +11,7 @@ router.post('/product', async (req, res) => {
     const { id } = req.user;
 
     try {
+        //verificar se e admin
         const adminId = await Admin.findById(id);
         if(!adminId) {
             throw new Error('user Unauthorized');
@@ -28,8 +29,14 @@ router.post('/product', async (req, res) => {
 //criar varios produtos de uma vez(payload = array de produtos)
 router.post('/poduct/many', async (req, res) => {
     const payload = req.body;
+    const { id } = req.user;
 
     try {
+        const adminId = await Admin.findById(id);
+        if(!adminId) {
+            throw new Error('user Unauthorized');
+        }
+
         const newProducts =  await Product.create(payload);
         console.log('new products array', newProducts);
         res.status(201).json(newProducts);
@@ -44,8 +51,15 @@ router.put('/product/upload-image/:productId', uploadImage.single('image'), asyn
     const { path } = req.file
     //console.log('req.file', req.file);
     const { productId } = req.params;
+    const { id } = req.user;
 
     try {
+        //verifica se e admin
+        const adminId = await Admin.findById(id);
+        if(!adminId) {
+            throw new Error('user Unauthorized');
+        }
+
         const updatePic = await Product.findByIdAndUpdate(productId, { image_one: path }, { new: true});
         res.status(200).json(updatePic);
     } catch(error) {
@@ -58,8 +72,15 @@ router.put('/product/upload-image/:productId', uploadImage.single('image'), asyn
 router.put('/product/:productId', async(req, res) => {
     const { productId } = req.params;
     const { payload } = req.body;
+    const { id } = req.user;
 
     try {
+        //verifica admin
+        const adminId = await Admin.findById(id);
+        if(!adminId) {
+            throw new Error('user Unauthorized');
+        }
+
         const editedProduct = await Product.findByIdAndUpdate(productId, payload);
         res.status(200).json(editedProduct);
     } catch (error) {
@@ -71,8 +92,15 @@ router.put('/product/:productId', async(req, res) => {
 //deletar um produto
 router.delete('/product/:productId', async (req, res) => {
     const { productId } = req.params;
+    const { id } = req.user;
 
     try {
+        //verifica admin
+        const adminId = await Admin.findById(id);
+        if(!adminId) {
+            throw new Error('user Unauthorized');
+        }
+
         await Product.findByIdAndDelete(productId);
         res.status(200).json();
     } catch (error) {
