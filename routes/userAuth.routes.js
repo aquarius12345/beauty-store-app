@@ -33,11 +33,11 @@ router.post('/user-auth/signup', async (req, res) =>{
         });
 
         //procurando user para pegar id
-        const userId = await User.findOne({ name });
+        // const userId = await User.findOne({ name });
         //console.log(userId);
 
         //criar carrinho de compras
-        await Cart.create({ user_id: userId.id });
+        // await Cart.create({ user_id: userId.id });
 
         res.status(201).json({
             name: newUser.name
@@ -77,7 +77,7 @@ router.post('/user-auth/login', async (req, res) => {
         res.status(200).json({ msg: payload, token });
         
     } catch (error) {
-        res.status(400).json({ msg: error.message });
+        res.status(400).json({ message: 'Error trying to login', error: error.message || error });
     }
 });
 

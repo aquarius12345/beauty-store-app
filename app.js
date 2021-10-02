@@ -9,6 +9,9 @@ const adminRoutes = require('./routes/admin.routes');
 const productsRoutes = require('./routes/products.routes');
 const userAuth = require('./routes/userAuth.routes');
 const userRoutes = require('./routes/user.routes');
+const cartProdRoutes = require('./routes/cartProduct.routes');
+const cartRoutes = require('./routes/cart.routes');
+
 
 //Conexao
 connectDB();
@@ -31,6 +34,8 @@ app.use(authMiddleware);
 
 ////Rotas Privadas
 app.use('/', adminRoutes);
+app.use('/', cartProdRoutes);
+app.use('/', cartRoutes);
 
 
 

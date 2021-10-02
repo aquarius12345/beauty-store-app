@@ -5,6 +5,7 @@ const Admin = require('../models/Admin');
 
 const router = Router();
 
+
 router.post('/admin-auth/signup', async (req, res) => {
     const { name, password } = req.body;
     try {
@@ -40,7 +41,7 @@ router.post('/admin-auth/login', async (req, res) => {
         const user = await Admin.findOne({ name });
         //console.log('user', user);
         if (!user) {
-            throw new Error('name not found');
+            throw new Error('username not found');
         }
 
         const compareHash = bcrypt.compareSync(password, user.passwordHash);
@@ -63,8 +64,9 @@ router.post('/admin-auth/login', async (req, res) => {
         res.status(200).json({ msg: payload, token });
 
     } catch(error) {
-        res.status(400).json({ msg: error.message });
+        res.status(400).json({ message: 'Error trying to login', error: error.message });
     }
 });
+
 
 module.exports = router;

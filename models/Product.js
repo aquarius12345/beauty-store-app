@@ -12,7 +12,8 @@ const productSchema = new Schema (
         image_one: String,
         image_two: String,
         brand: String,
-        units_in_stock: Number
+        units_in_stock: Number,
+        reviews: [{ type: Schema.Types.ObjectId, ref: 'Review'}]
     },
     { timestamps: true }
 );

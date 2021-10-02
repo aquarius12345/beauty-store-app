@@ -38,10 +38,10 @@ router.post('/poduct/many', async (req, res) => {
         }
 
         const newProducts =  await Product.create(payload);
-        console.log('new products array', newProducts);
+        //console.log('new products array', newProducts);
         res.status(201).json(newProducts);
     } catch(error) {
-        res.status(500).json({ msg: 'Error while creating products'}, error);
+        res.status(500).json({ msg: 'Error while creating products', error });
     }
 });
 
@@ -63,7 +63,7 @@ router.put('/product/upload-image/:productId', uploadImage.single('image'), asyn
         const updatePic = await Product.findByIdAndUpdate(productId, { image_one: path }, { new: true});
         res.status(200).json(updatePic);
     } catch(error) {
-        res.status(500).json({ msg: 'Error while uploading image' }, error);
+        res.status(500).json({ msg: 'Error while uploading image', error });
     }
 });
 
@@ -84,7 +84,7 @@ router.put('/product/:productId', async(req, res) => {
         const editedProduct = await Product.findByIdAndUpdate(productId, payload);
         res.status(200).json(editedProduct);
     } catch (error) {
-        res.status(500).json({ mesg: 'Error while editing product'}, error);
+        res.status(500).json({ message: 'Error while editing product', error });
     }
 });
 
@@ -104,7 +104,7 @@ router.delete('/product/:productId', async (req, res) => {
         await Product.findByIdAndDelete(productId);
         res.status(200).json();
     } catch (error) {
-        res.status(500).json({ msg: 'Error while deleting product' }, error);
+        res.status(500).json({ message: 'Error while deleting product', error });
     }
 })
 
