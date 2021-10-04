@@ -8,13 +8,17 @@ const router = Router();
 router.post('/review/:productId', async(req, res) => {
     const { productId } = req.params;
     const { id } = req.user;
+    const { review } = req.body;
+    //console.log('req.body', req.body);
 
     try {
-        const newReview = {...req.body, product_id: productId, user_id: id };
-        const reviewCreate = await Review.create(newReview);
+        const newReview = {review , product_id: productId, user_id: id };
+        console.log(newReview);
+        const reviewCreated = await Review.create(newReview);
+        console.log(reviewCreated);
         
-        await Product.findByIdAndUpdate(productId, { $push: { reviews: reviewCreate._id }});
-        res.status(201).json(reviewCreate);
+        await Product.findByIdAndUpdate(productId, { $push: { reviews: reviewCreated._id }}, { new: true });
+        res.status(201).json(reviewCreated);
     } catch (error) {
         res.status(500).json({ message: 'Error trying to create review', error });
     }
@@ -27,8 +31,8 @@ router.get('/review/:productId', async(req, res) => {
 
     try {
         const reviews = await Review.find({ product_id: productId});
-        console.log(reviews);
-        res.status(200).json(review);
+        //console.log('reviews', reviews);
+        res.status(200).json(reviews);
     } catch (error) {
         res.status(500).json({ message: 'Error trying to get reviews', error });
     }
@@ -66,3 +70,6 @@ router.delete('/review/:reviewId', async(req, res) => {
         res.status(500).json({ message: 'Error trying to delete a review'});
     }
 });
+
+
+module.exports = router;

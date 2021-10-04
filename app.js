@@ -11,6 +11,7 @@ const userAuth = require('./routes/userAuth.routes');
 const userRoutes = require('./routes/user.routes');
 const cartProdRoutes = require('./routes/cartProduct.routes');
 const cartRoutes = require('./routes/cart.routes');
+const reviewRoutes = require('./routes/review.routes');
 
 
 //Conexao
@@ -36,8 +37,7 @@ app.use(authMiddleware);
 app.use('/', adminRoutes);
 app.use('/', cartProdRoutes);
 app.use('/', cartRoutes);
-
-
+app.use('/', reviewRoutes);
 
 
 app.listen(process.env.PORT, () => console.log(`Server running on port ${process.env.PORT}`));

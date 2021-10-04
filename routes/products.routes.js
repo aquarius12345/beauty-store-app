@@ -6,7 +6,7 @@ const router = Router();
 //get all products
 router.get('/product/all', async (req, res) => {
     try {
-        const allProducts = await Product.find();
+        const allProducts = await Product.find().populate('reviews', 'review'); 
         res.status(200).json(allProducts);
     } catch (error) {
         res.status(500).json(error);

@@ -9,7 +9,7 @@ router.get('/cart', async (req, res) => {
     const { id } = req.user;
 
     try {
-        const cart = await Cart.find({ user_id: id });
+        const cart = await Cart.findOne({ user_id: id });
         console.log('this is Cart routes', cart);
         res.status(200).json(cart);
     } catch (error) {
@@ -23,15 +23,15 @@ router.post('/cart/:productId', async ( req, res) => {
     const { productId } = req.params;
     const { id } = req.user;
     const { qty } = req.body;
+    //console.log('req.body', req.body);
 
     try {
         const cart = await Cart.findOne({ user_id: id });
-        console.log('cart inside cart routes', cart);
-
-        //se nao achar Cart
+        
+        //----se nao achar Cart!!-----
         if(!cart) {
             const newcart = await Cart.create({ user_id: id });
-            console.log('newcart', newcart);
+            //console.log('newcart', newcart);
 
             const payload = {
                 product_id: productId,
@@ -40,25 +40,32 @@ router.post('/cart/:productId', async ( req, res) => {
             }
 
             const productCart = await CartProduct.create(payload);
-            console.log('productCart', productCart);
+            //console.log('productCart', productCart);
 
-            await Cart.findByIdAndUpdate(newcart._id, { $push: { products: productCart._id } }, { new: true });
-            res.status(201).json(productCart);
+            const updatedCart = await Cart.findByIdAndUpdate(newcart._id, { $push: { products: productCart._id } }, { new: true });
+            res.status(201).json(updatedCart);
 
         } else {
-            //se encontar Cart
-            const payload = {
-                product_id: productId,
-                cart_id: cart._id,
-                qty
+            //------se encontar Cart-------
+            const product = await CartProduct.findOne({ product_id: productId });
+
+            if(product) {
+                const newQty = product.qty + 1;
+                const updatedProd = await CartProduct.findByIdAndUpdate(product._id, { qty: newQty });
+                res.status(200).json({ message: 'Quantity upadted with success'});
+            } else {
+                const payload = {
+                    product_id: productId,
+                    cart_id: cart._id,
+                    qty
+                }
+    
+                const prodCart = await CartProduct.create(payload);
+                //console.log('productCart', prodCart);
+    
+                const updCart = await Cart.findByIdAndUpdate(cart._id, { $push: { products: prodCart._id } }, { new: true });
+                res.status(201).json(updCart);
             }
-            //console.log('payload', payload);
-
-            const prodCart = await CartProduct.create(payload);
-            console.log('productCart', prodCart);
-
-            await Cart.findByIdAndUpdate(cart._id, { $push: { products: prodCart._id } }, { new: true });
-            res.status(201).json(prodCart);
         }
         
     } catch (error) {
@@ -110,12 +117,12 @@ router.delete('/cart/:productId', async (req, res) => {
 
 
 //limpar Cart(remover todos os produtos)
-router.delete('/cart/all-products', async (req, res) => {
+router.delete('/cart-all-products', async (req, res) => {
     const { id } = req.user;
     
     try {
         const cart = await Cart.findOne({ user_id: id });
-
+        console.log('cart delete', cart)
         //deletar todos os CartProduct
         await CartProduct.deleteMany({ cart_id: cart._id });
 
@@ -129,7 +136,20 @@ router.delete('/cart/all-products', async (req, res) => {
 });
 
 
-//remover Cart
+//remover  entire Cart
+router.delete('/cart-delete-cart', async(req, res) => {
+    const { id } = req.user;
+
+    try {
+        await CartProduct.deleteMany({ user_id: id });
+
+        await Cart.findOneAndDelete({ user_id: id });
+        res.status(200).json({ message: 'Cart succesfully deleted' });
+        
+    } catch (error) {
+        res.status(500).json(error);
+    }
+});
 
 
 
