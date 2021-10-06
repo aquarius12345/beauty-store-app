@@ -5,7 +5,7 @@ const productSchema = new Schema (
         name: { type: String, unique: true },
         category: String,
         type: String,
-        skyn_type: String,
+        skin_type: String,
         description: String,
         price: Number,
         rating: Number,
@@ -13,6 +13,8 @@ const productSchema = new Schema (
         image_two: String,
         brand: String,
         units_in_stock: Number,
+        ingredients: String,
+        size: String,
         reviews: [{ type: Schema.Types.ObjectId, ref: 'Review'}]
     },
     { timestamps: true }

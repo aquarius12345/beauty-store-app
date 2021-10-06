@@ -9,10 +9,11 @@ router.get('/cart', async (req, res) => {
     const { id } = req.user;
 
     try {
-        const cart = await Cart.findOne({ user_id: id });
+        const cart = await Cart.findOne({ user_id: id }).populate({ path:'products', populate: { path: 'product_id' }});
         console.log('this is Cart routes', cart);
         res.status(200).json(cart);
     } catch (error) {
+        console.log(error);
         res.status(500).json(error);
     }
 });
@@ -90,6 +91,32 @@ router.put('/cart/:productId', async (req,res) => {
 });
 
 
+//Alterar Status do Cart Fechado
+router.put('/cart-fechado', async (req, res) => {
+    const { id } = req.user;
+
+    try {
+        const cart = await Cart.findOneAndUpdate({ user_id: id}, { status: 'fechado' }, { new: true });
+        res.status(200).json({ cart });
+    } catch (error) {
+        res.status(500).json(error);
+    }
+});
+
+
+//Cart Status Pago
+router.put('/cart-pago', async (req, res) => {
+    const { id } = req.user;
+
+    try {
+        const cart = await Cart.findOneAndUpdate({ user_id: id}, { status: 'pago' }, { new: true });
+        res.status(200).json({ cart });
+    } catch (error) {
+        res.status(500).json(error);
+    }
+});
+
+
 //deletar um Cart Product dentro do Cart
 router.delete('/cart/:productId', async (req, res) => {
     const { productId } = req.params;
@@ -150,8 +177,6 @@ router.delete('/cart-delete-cart', async(req, res) => {
         res.status(500).json(error);
     }
 });
-
-
 
 
 module.exports = router;
