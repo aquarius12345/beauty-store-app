@@ -164,7 +164,7 @@ router.delete('/cart-all-products', async (req, res) => {
 
 
 //remover  entire Cart
-router.delete('/cart-delete-cart', async(req, res) => {
+router.delete('/cart-delete', async(req, res) => {
     const { id } = req.user;
 
     try {
