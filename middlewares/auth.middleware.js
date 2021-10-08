@@ -16,7 +16,7 @@ const auth = (req, res, next) => {
             tokenWithoutBearer,
             process.env.SECRET_JWT
         )
-        //console.log(decodedToken);
+        console.log(decodedToken);
         req.user = { ...decodedToken }
         console.log('req.user', req.user);
         next();

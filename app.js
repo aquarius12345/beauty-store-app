@@ -28,7 +28,6 @@ app.use(express.json());
 app.use('/', adminAuth);
 app.use('/', productsRoutes);
 app.use('/', userAuth);
-app.use('/', userRoutes);
 
 ///Middleware
 app.use(authMiddleware);
@@ -38,6 +37,7 @@ app.use('/', adminRoutes);
 app.use('/', cartProdRoutes);
 app.use('/', cartRoutes);
 app.use('/', reviewRoutes);
+app.use('/', userRoutes);
 
 
 app.listen(process.env.PORT, () => console.log(`Server running on port ${process.env.PORT}`));
