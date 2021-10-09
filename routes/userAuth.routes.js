@@ -15,12 +15,12 @@ router.post('/user-auth/signup', async (req, res) =>{
 
         const mail = await User.findOne({ email });
         if (mail) {
-            throw new Error('email already in use');
+            throw new Error('Email already in use');
         }
 
         const user = await User.findOne({ name });
         if (user) {
-            throw new Error('username already exists');
+            throw new Error('Username already exists');
         }
 
         const salt = await bcrypt.genSalt(10);
@@ -32,19 +32,12 @@ router.post('/user-auth/signup', async (req, res) =>{
             passwordHash
         });
 
-        //procurando user para pegar id
-        // const userId = await User.findOne({ name });
-        //console.log(userId);
-
-        //criar carrinho de compras
-        // await Cart.create({ user_id: userId.id });
-
         res.status(201).json({
             name: newUser.name
         });
         
     } catch (error) {
-        res.status(500).json({ msg: 'Error while creating user', error})
+        res.status(500).json({ msg: 'Error while creating user', error: error.message || error })
     }
 });
 
@@ -55,12 +48,12 @@ router.post('/user-auth/login', async (req, res) => {
         const user = await User.findOne({ email });
 
         if (!user) {
-            throw new Error('email not found')
+            throw new Error('Email not found')
         }
 
         const compareHash = bcrypt.compareSync(password, user.passwordHash);
         if (!compareHash) {
-            throw new Error('email or password incorrect')
+            throw new Error('Email or password incorrect')
         }
 
         const payload = {
@@ -77,7 +70,7 @@ router.post('/user-auth/login', async (req, res) => {
         res.status(200).json({ msg: payload, token });
         
     } catch (error) {
-        res.status(400).json({ message: 'Error trying to login', error: error.message || error });
+        res.status(500).json({ message: 'Error trying to login', error: error.message || error });
     }
 });
 
