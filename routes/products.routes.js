@@ -18,7 +18,7 @@ router.get('/product/:productId', async (req, res) => {
     const { productId } = req.params;
 
     try {
-        const product = await Product.findById(productId);
+        const product = await Product.findById(productId).populate('reviews', 'review');
         res.status(200).json(product);
     } catch (error) {
         res.status(500).json(error);

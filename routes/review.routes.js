@@ -25,18 +25,18 @@ router.post('/review/:productId', async(req, res) => {
 });
 
 
-//pegar todos os reviews de um produto
-router.get('/review/:productId', async(req, res) => {
-    const { productId } = req.params;
+// //pegar todos os reviews de um produto
+// router.get('/review/:productId', async(req, res) => {
+//     const { productId } = req.params;
 
-    try {
-        const reviews = await Review.find({ product_id: productId});
-        //console.log('reviews', reviews);
-        res.status(200).json(reviews);
-    } catch (error) {
-        res.status(500).json({ message: 'Error trying to get reviews', error });
-    }
-});
+//     try {
+//         const reviews = await Review.find({ product_id: productId});
+//         //console.log('reviews', reviews);
+//         res.status(200).json(reviews);
+//     } catch (error) {
+//         res.status(500).json({ message: 'Error trying to get reviews', error });
+//     }
+// });
 
 
 //update review

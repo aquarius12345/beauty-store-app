@@ -12,6 +12,7 @@ const userRoutes = require('./routes/user.routes');
 const cartProdRoutes = require('./routes/cartProduct.routes');
 const cartRoutes = require('./routes/cart.routes');
 const reviewRoutes = require('./routes/review.routes');
+const reviewPublic = require('./routes/reviewPublic.routes');
 
 
 //Conexao
@@ -28,6 +29,7 @@ app.use(express.json());
 app.use('/', adminAuth);
 app.use('/', productsRoutes);
 app.use('/', userAuth);
+app.use('/', reviewPublic);
 
 ///Middleware
 app.use(authMiddleware);
