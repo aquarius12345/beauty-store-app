@@ -48,7 +48,7 @@ router.post('/user-auth/login', async (req, res) => {
         const user = await User.findOne({ email });
 
         if (!user) {
-            throw new Error('Email not found')
+            throw new Error('Email not found, please digit a valid email')
         }
 
         const compareHash = bcrypt.compareSync(password, user.passwordHash);

@@ -20,7 +20,7 @@ router.get('/cart', async (req, res) => {
 
 
 //Criar Cart, criar um CartProduct e adicionar no Cart
-router.post('/cart/:productId', async ( req, res) => {
+router.post('/cart/:productId', async (req, res) => {
     const { productId } = req.params;
     const { id } = req.user;
     const { qty } = req.body;
@@ -67,8 +67,7 @@ router.post('/cart/:productId', async ( req, res) => {
                 const updCart = await Cart.findByIdAndUpdate(cart._id, { $push: { products: prodCart._id } }, { new: true });
                 res.status(201).json(updCart);
             }
-        }
-        
+        }   
     } catch (error) {
         res.status(500).json({ message: 'Error while adding product to cart', error });
     }
@@ -94,7 +93,6 @@ router.put('/cart/:productId', async (req,res) => {
 //Alterar Status do Cart Fechado
 router.put('/cart-fechado', async (req, res) => {
     const { id } = req.user;
-
     try {
         const cart = await Cart.findOneAndUpdate({ user_id: id}, { status: 'fechado' }, { new: true });
         res.status(200).json({ cart });
@@ -107,7 +105,6 @@ router.put('/cart-fechado', async (req, res) => {
 //Cart Status Pago
 router.put('/cart-pago', async (req, res) => {
     const { id } = req.user;
-
     try {
         const cart = await Cart.findOneAndUpdate({ user_id: id}, { status: 'pago' }, { new: true });
         res.status(200).json({ cart });
@@ -136,7 +133,6 @@ router.delete('/cart/:productId', async (req, res) => {
         //remover em CartProduct
         await CartProduct.findOneAndDelete({ cart_id: cart._id, product_id: productId });
         res.status(200).json();
-
     } catch(error) {
         res.status(500).json({ message: 'Error deleting product in Cart', error});
     }
@@ -156,7 +152,6 @@ router.delete('/cart-all-products', async (req, res) => {
         //deletar dentro de Cart
         await Cart.findByIdAndUpdate(cart._id, { $set: { products: [] }});
         res.status(200).json();
-
     } catch (error) {
         res.status(500).json(error);
     }
@@ -171,8 +166,7 @@ router.delete('/cart-delete', async(req, res) => {
         await CartProduct.deleteMany({ user_id: id });
 
         await Cart.findOneAndDelete({ user_id: id });
-        res.status(200).json({ message: 'Cart succesfully deleted' });
-        
+        res.status(200).json({ message: 'Cart succesfully deleted' });    
     } catch (error) {
         res.status(500).json(error);
     }

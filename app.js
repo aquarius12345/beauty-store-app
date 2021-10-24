@@ -13,6 +13,7 @@ const cartProdRoutes = require('./routes/cartProduct.routes');
 const cartRoutes = require('./routes/cart.routes');
 const reviewRoutes = require('./routes/review.routes');
 const reviewPublic = require('./routes/reviewPublic.routes');
+const myListRoutes = require('./routes/myList.routes');
 
 
 //Conexao
@@ -40,6 +41,7 @@ app.use('/', cartProdRoutes);
 app.use('/', cartRoutes);
 app.use('/', reviewRoutes);
 app.use('/', userRoutes);
+app.use('/', myListRoutes);
 
 
 app.listen(process.env.PORT, () => console.log(`Server running on port ${process.env.PORT}`));

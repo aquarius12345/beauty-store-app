@@ -12,10 +12,10 @@ router.post('/review/:productId', async(req, res) => {
     //console.log('req.body', req.body);
 
     try {
-        const newReview = {review , product_id: productId, user_id: id };
-        console.log(newReview);
+        const newReview = { review, product_id: productId, user_id: id };
+        //console.log(newReview);
         const reviewCreated = await Review.create(newReview);
-        console.log(reviewCreated);
+        //console.log(reviewCreated);
         
         await Product.findByIdAndUpdate(productId, { $push: { reviews: reviewCreated._id }}, { new: true });
         res.status(201).json(reviewCreated);
