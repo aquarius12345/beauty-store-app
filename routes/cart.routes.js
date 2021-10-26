@@ -25,7 +25,6 @@ router.post('/cart/:productId', async (req, res) => {
     const { id } = req.user;
     const { qty } = req.body;
     //console.log('req.body', req.body);
-
     try {
         const cart = await Cart.findOne({ user_id: id });
         
@@ -39,10 +38,8 @@ router.post('/cart/:productId', async (req, res) => {
                 cart_id: newcart._id,
                 qty
             }
-
             const productCart = await CartProduct.create(payload);
             //console.log('productCart', productCart);
-
             const updatedCart = await Cart.findByIdAndUpdate(newcart._id, { $push: { products: productCart._id } }, { new: true });
             res.status(201).json(updatedCart);
 
